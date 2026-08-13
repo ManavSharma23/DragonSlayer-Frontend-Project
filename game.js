@@ -315,10 +315,37 @@ function goLeave() {
     goStore();
 }
 
-function fightSlime() {}
-function fightFangBeast() {}
-function fightOgre() {}
-function goFightDragon() {}
+function fightSlime() {
+    fight = 0;
+    goFight();
+}
+
+function fightFangBeast() {
+    fight = 1;
+    goFight();
+}
+
+function fightOgre() {
+    fight = 2;
+    goFight();
+}
+
+function goFightDragon() {
+    fight = 3;
+    goFight();
+}
+
+function goFight() {
+    console.log("goFight clicked");
+    update(locations[3]);
+
+    monster_health = monsters[fight].health;
+    monsterhealth.innerText = monster_health;
+    monstername.innerText = monsters[fight].name;
+    monsterdamage.innerText = monsters[fight].damage;
+    monster_stats.style.display = "flex";
+}
+
 function goAttack() {}
 function doDefence() {}
 function increaseHealth() {}
