@@ -346,8 +346,86 @@ function goFight() {
     monster_stats.style.display = "flex";
 }
 
-function goAttack() {}
-function doDefence() {}
+function goAttack() {
+    let weapon_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon" && inventory[i].status === "Equipped") {
+            weapon_array.push(inventory[i]);
+        }
+    }
+    let equipped_weapon = weapon_array[0];
+    let player_damage = equipped_weapon ? equipped_weapon.damage : 10;
+
+    let actual_player_damage = Math.max(1, Math.floor(player_damage * (0.8 + Math.random() * 0.4)));
+    let actual_monster_damage = Math.max(1, Math.floor(monsters[fight].damage * (0.8 + Math.random() * 0.4)));
+
+    monster_health -= actual_player_damage;
+    health -= actual_monster_damage;
+
+    if (monster_health < 0) monster_health = 0;
+    if (health < 0) health = 0;
+
+    healthtext.innerText = health;
+    monsterhealth.innerText = monster_health;
+
+    text.innerText = "You attacked the " + monsters[fight].name + " with the " + (equipped_weapon ? equipped_weapon.name : "Knife") + "!\n";
+    text.innerText += "You dealt " + actual_player_damage + " damage.\n";
+    text.innerText += "The " + monsters[fight].name + " hit you back for " + actual_monster_damage + " damage.\n\n";
+
+    if (monster_health <= 0) {
+        let xp_reward = Math.floor(monsters[fight].health / 3);
+        let gold_reward = Math.floor(monsters[fight].health / 2);
+        xp += xp_reward;
+        gold += gold_reward;
+        xptext.innerText = xp;
+        goldtext.innerText = gold;
+
+        text.innerText += "🎉 You defeated the " + monsters[fight].name + "!\n";
+        text.innerText += "You gained " + xp_reward + " XP and " + gold_reward + " gold!\n";
+
+        if (fight === 3) {
+            text.innerText += "\n🏆 YOU WIN! The Dragon is slain! The town of Geblery is saved!\n";
+        }
+
+        monster_stats.style.display = "none";
+        update(locations[0]);
+        return;
+    }
+
+    if (health <= 0) {
+        health = 0;
+        healthtext.innerText = health;
+        text.innerText = "💀 You have been defeated by the " + monsters[fight].name + "...\n";
+        text.innerText += "Game Over! Refresh the page to play again.";
+        go_to_store.disabled = true;
+        go_to_cave.disabled = true;
+        fight_dragon.disabled = true;
+        go_to_inventory.disabled = true;
+        monster_stats.style.display = "none";
+    }
+}
+
+function doDefence() {
+    let actual_monster_damage = Math.max(1, Math.floor(monsters[fight].damage * (0.8 + Math.random() * 0.4)));
+    let reduced_damage = Math.floor(actual_monster_damage * 0.5);
+    health -= reduced_damage;
+    if (health < 0) health = 0;
+
+    healthtext.innerText = health;
+
+    text.innerText = "🛡️ You defended against the " + monsters[fight].name + "!\n";
+    text.innerText += "You blocked most of the attack and only took " + reduced_damage + " damage.\n";
+
+    if (health <= 0) {
+        text.innerText += "\n💀 You were defeated even while defending...\nGame Over! Refresh the page to play again.";
+        go_to_store.disabled = true;
+        go_to_cave.disabled = true;
+        fight_dragon.disabled = true;
+        go_to_inventory.disabled = true;
+        monster_stats.style.display = "none";
+    }
+}
+
 function increaseHealth() {}
 function changeWeapon() {}
 function goBack() {}
