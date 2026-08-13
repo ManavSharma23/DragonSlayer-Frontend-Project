@@ -426,6 +426,136 @@ function doDefence() {
     }
 }
 
+function goInventory() {
+    console.log("Going to Inventory");
+
+    update(locations[4]);
+
+    text.innerText += "\n• Category : Weapons \n ";
+    text.innerText += "------------------------------------- \n";
+
+    let j = 1;
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon") {
+            text.innerText += (j) + ". Name : " + inventory[i].name + "\n";
+            text.innerText += "   Damage : " + inventory[i].damage + "\n";
+            text.innerText += "   Price : " + inventory[i].price + "\n";
+            text.innerText += "   Status : " + inventory[i].status + "\n" + "\n";
+            j++;
+        }
+    }
+    let k = 1;
+    text.innerText += "\n• Category : Portions \n ";
+    text.innerText += "------------------------------------- \n";
+
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "Portions") {
+            text.innerText += (k) + ". Name : " + inventory[i].name + "\n";
+            text.innerText += "   Quantity : " + inventory[i].quantity + "\n";
+            text.innerText += "   Health Restore : " + inventory[i].health_increase + "\n";
+            k++;
+        }
+    }
+}
+
+function changeWeapon() {
+    let weapon_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon") {
+            weapon_array.push(inventory[i]);
+        }
+    }
+
+    if (current_weapon_equipped >= weapon_array.length) {
+        current_weapon_equipped = weapon_array.length - 1;
+    }
+    if (current_weapon_equipped < 0) {
+        current_weapon_equipped = 0;
+    }
+
+    text.innerText = weapon_array[current_weapon_equipped].intro_text;
+    text.innerText += "\n \n";
+    text.innerText += "Name : " + weapon_array[current_weapon_equipped].name + "\n";
+    text.innerText += "Damage : " + weapon_array[current_weapon_equipped].damage + "\n";
+    text.innerText += "Price : " + weapon_array[current_weapon_equipped].price + "\n";
+    text.innerText += "Status : " + weapon_array[current_weapon_equipped].status + "\n";
+
+    let total_weapons = weapon_array.length;
+    let page_index;
+    if (total_weapons === 1) {
+        page_index = 0;
+    } else if (current_weapon_equipped === 0) {
+        page_index = 0;
+    } else if (current_weapon_equipped === total_weapons - 1) {
+        page_index = 4;
+    } else {
+        page_index = 1;
+    }
+
+    go_to_store.innerText = weapon_function[page_index]["Button Text"][0];
+    go_to_cave.innerText = weapon_function[page_index]["Button Text"][1];
+    fight_dragon.innerText = weapon_function[page_index]["Button Text"][2];
+
+    if (page_index == 1 || page_index == 2 || page_index == 3) {
+        go_to_inventory.style.display = "inline-block";
+        go_to_inventory.innerText = weapon_function[page_index]["Button Text"][3];
+        go_to_inventory.onclick = weapon_function[page_index]["button_functions"][3];
+    } else {
+        go_to_inventory.style.display = "none";
+    }
+
+    go_to_store.onclick = weapon_function[page_index]["button_functions"][0];
+    go_to_cave.onclick = weapon_function[page_index]["button_functions"][1];
+    fight_dragon.onclick = weapon_function[page_index]["button_functions"][2];
+}
+
+const weapon_function = [
+    {
+        page_number: 1,
+        "Button Text": ["Next", "Equip", "Go Back"],
+        "button_functions": [goNextWeapon, equipWeapon, goBack],
+    },
+    {
+        page_number: 2,
+        "Button Text": ["Previous", "Next", "Equip", "Go Back"],
+        "button_functions": [goPreviousWeapon, goNextWeapon, equipWeapon, goBack],
+    },
+    {
+        page_number: 3,
+        "Button Text": ["Previous", "Next", "Equip", "Go Back"],
+        "button_functions": [goPreviousWeapon, goNextWeapon, equipWeapon, goBack],
+    },
+    {
+        page_number: 4,
+        "Button Text": ["Previous", "Next", "Equip", "Go Back"],
+        "button_functions": [goPreviousWeapon, goNextWeapon, equipWeapon, goBack],
+    },
+    {
+        page_number: 5,
+        "Button Text": ["Previous", "Equip", "Go Back"],
+        "button_functions": [goPreviousWeapon, equipWeapon, goBack],
+    }
+];
+
+function goNextWeapon() {
+    let weapon_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon") weapon_array.push(inventory[i]);
+    }
+    if (current_weapon_equipped < weapon_array.length - 1) {
+        current_weapon_equipped += 1;
+        changeWeapon();
+    }
+}
+
+function goPreviousWeapon() {
+    if (current_weapon_equipped > 0) {
+        current_weapon_equipped -= 1;
+        changeWeapon();
+    }
+}
+
+function equipWeapon() {}
 function increaseHealth() {}
-function changeWeapon() {}
 function goBack() {}
+
