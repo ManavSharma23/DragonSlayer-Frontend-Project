@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Game</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <div id="game">
+        <div id="player_stats">
+            <span class="stats">XP: <strong><span id="XPtext">0</span></strong></span>
+            <span class="stats">Health: <strong><span id="Healthtext">100</span></strong></span>
+            <span class="stats">Gold: <strong><span id="Goldtext">100</span></strong></span>
+        </div>
+        <div id="main_buttons">
+            <button class="top_buttons" id="button1">Go To Store</button>
+            <button class="top_buttons" id="button2">Go to Cave</button>
+            <button class="top_buttons" id="button3">Fight Dragon</button>
+            <button class="top_buttons" id="button4">Inventory</button>
+        </div>
+        <div id="monster_stats">
+            <span class="stats">Name: <strong><span id="MonsterName"></span></strong></span>
+            <span class="stats">Health: <strong><span id="monsterhealth"></span></strong></span>
+            <span class="stats">Damage: <strong><span id="monsterdamage"></span></strong></span>
+        </div>
+        <div id="intro_text">
+            <pre id="text">Welcome Dragon Slayer to the Town of Geblery!!
+Our town needs to your help. We have summoned you from your world
+in order to destroy the dragon.
+
+For your next step , Please choose from the above buttons !</pre>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
