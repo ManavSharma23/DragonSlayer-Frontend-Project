@@ -59,26 +59,6 @@ const locations = [
     }
 ];
 
-function update(locations) {
-    go_to_store.innerText = locations["Button Text"][0];
-    go_to_cave.innerText = locations["Button Text"][1];
-    fight_dragon.innerText = locations["Button Text"][2];
-    go_to_inventory.innerText = locations["Button Text"][3];
-    text.innerText = locations.text;
-
-    go_to_store.onclick = locations["button_functions"][0];
-    go_to_cave.onclick = locations["button_functions"][1];
-    fight_dragon.onclick = locations["button_functions"][2];
-    go_to_inventory.onclick = locations["button_functions"][3];
-    go_to_inventory.style.display = "inline-block";
-
-    previous_location = current_location;
-    current_location = locations;
-}
-
-let current_location = locations[0];
-let previous_location = null;
-
 let inventory = [
     {
         category: "Portions",
@@ -158,8 +138,107 @@ const store_weapons = [
     }
 ];
 
+const monsters = [
+    {
+        name: "Slime",
+        health: 30,
+        damage: 15
+    },
+    {
+        name: "Fang Beast",
+        health: 55,
+        damage: 30
+    },
+    {
+        name: "The Ogre Of Despair",
+        health: 110,
+        damage: 60
+    },
+    {
+        name: "The Dragon",
+        health: 300,
+        damage: 90
+    }
+];
+
+function update_store() {
+    text.innerText = Weapons[current_page].intro_text;
+    text.innerText += "\n";
+    text.innerText += "Name : " + Weapons[current_page].name + "\n";
+    text.innerText += "Price : " + Weapons[current_page].price + "\n";
+    text.innerText += "Damage : " + Weapons[current_page].damage + "\n";
+
+    go_to_store.innerText = store_weapons[current_page]["Button Text"][0];
+    go_to_cave.innerText = store_weapons[current_page]["Button Text"][1];
+    fight_dragon.innerText = store_weapons[current_page]["Button Text"][2];
+    if (current_page == 1 || current_page == 2) {
+        go_to_inventory.style.display = "inline-block";
+        go_to_inventory.innerText = store_weapons[current_page]["Button Text"][3];
+        go_to_inventory.onclick = store_weapons[current_page]["button_functions"][3];
+    } else {
+        go_to_inventory.style.display = "none";
+    }
+
+    go_to_store.onclick = store_weapons[current_page]["button_functions"][0];
+    go_to_cave.onclick = store_weapons[current_page]["button_functions"][1];
+    fight_dragon.onclick = store_weapons[current_page]["button_functions"][2];
+}
+
+go_to_store.onclick = goStore;
+go_to_cave.onclick = goCave;
+fight_dragon.onclick = goFightDragon;
+go_to_inventory.onclick = goInventory;
+
+function update(locations) {
+    go_to_store.innerText = locations["Button Text"][0];
+    go_to_cave.innerText = locations["Button Text"][1];
+    fight_dragon.innerText = locations["Button Text"][2];
+    go_to_inventory.innerText = locations["Button Text"][3];
+    text.innerText = locations.text;
+
+    go_to_store.onclick = locations["button_functions"][0];
+    go_to_cave.onclick = locations["button_functions"][1];
+    fight_dragon.onclick = locations["button_functions"][2];
+    go_to_inventory.onclick = locations["button_functions"][3];
+    go_to_inventory.style.display = "inline-block";
+
+    previous_location = current_location;
+    current_location = locations;
+}
+
+let current_location = locations[0];
+let previous_location = null;
+
+function goStore() {
+    console.log("goStore clicked");
+    update(locations[1]);
+}
+
+function goTown() {
+    console.log("goTown clicked");
+    update(locations[0]);
+    monster_stats.style.display = "none";
+}
+
+function goCave() {
+    console.log("goCave clicked");
+    update(locations[2]);
+}
+
+function goFight() {}
+function goInventory() {}
+function buyHealth() {}
+function buyWeapons() {}
 function goNext() {}
 function goPrevious() {}
 function goBuy() {}
 function goLeave() {}
-
+function fightSlime() {}
+function fightFangBeast() {}
+function fightOgre() {}
+function goFightDragon() {}
+function goAttack() {}
+function doDefence() {}
+function increaseHealth() {}
+function changeWeapon() {}
+function goBack() {}
