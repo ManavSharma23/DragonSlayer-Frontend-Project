@@ -30,7 +30,7 @@ const locations = [
     {
         name: "Town Square",
         "Button Text": ["Go to Store", "Go to Cave", "Fight Dragon", "Inventory"],
-        "button_functions": [goStore, goCave, goFight, goInventory],
+        "button_functions": [goStore, goCave, goFightDragon, goInventory],
         text: "You Are In the Town Square."
     },
     {
@@ -225,8 +225,8 @@ function goCave() {
     update(locations[2]);
 }
 
-function goFight() {}
-function goInventory() {}
+function goFight() { }
+function goInventory() { }
 function buyHealth() {
     if (gold >= 10 && health <= 200) {
         gold -= 10;
@@ -380,23 +380,27 @@ function goAttack() {
         xptext.innerText = xp;
         goldtext.innerText = gold;
 
-        text.innerText += "🎉 You defeated the " + monsters[fight].name + "!\n";
-        text.innerText += "You gained " + xp_reward + " XP and " + gold_reward + " gold!\n";
+        monster_stats.style.display = "none";
+
+        let victory_msg = "🎉 MONSTER DEFEATED!\n\n";
+        victory_msg += "You successfully defeated the " + monsters[fight].name + "!\n";
+        victory_msg += "Rewards: +" + xp_reward + " XP | +" + gold_reward + " Gold\n\n";
 
         if (fight === 3) {
-            text.innerText += "\n🏆 YOU WIN! The Dragon is slain! The town of Geblery is saved!\n";
+            victory_msg += "🏆 YOU WIN! The Dragon is slain! The town of Geblery is saved!\n";
+        } else {
+            victory_msg += "Please choose your next action from the buttons above!";
         }
 
-        monster_stats.style.display = "none";
         update(locations[0]);
+        text.innerText = victory_msg;
         return;
     }
 
     if (health <= 0) {
         health = 0;
         healthtext.innerText = health;
-        text.innerText = "💀 You have been defeated by the " + monsters[fight].name + "...\n";
-        text.innerText += "Game Over! Refresh the page to play again.";
+        text.innerText = "💀 YOU LOST!\n\nYou have been defeated by " + monsters[fight].name + "...\nGAME OVER! Refresh the page to play again.";
         go_to_store.disabled = true;
         go_to_cave.disabled = true;
         fight_dragon.disabled = true;
@@ -417,7 +421,7 @@ function doDefence() {
     text.innerText += "You blocked most of the attack and only took " + reduced_damage + " damage.\n";
 
     if (health <= 0) {
-        text.innerText += "\n💀 You were defeated even while defending...\nGame Over! Refresh the page to play again.";
+        text.innerText = "💀 YOU LOST!\n\nYou were defeated by " + monsters[fight].name + " while defending...\nGAME OVER! Refresh the page to play again.";
         go_to_store.disabled = true;
         go_to_cave.disabled = true;
         fight_dragon.disabled = true;
