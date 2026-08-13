@@ -555,7 +555,174 @@ function goPreviousWeapon() {
     }
 }
 
-function equipWeapon() {}
-function increaseHealth() {}
-function goBack() {}
+function equipWeapon() {
+    let weapon_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon") {
+            weapon_array.push(inventory[i]);
+        }
+    }
+
+    let selected_weapon = weapon_array[current_weapon_equipped];
+
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "weapon") {
+            inventory[i].status = "Unequipped";
+        }
+    }
+
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].name === selected_weapon.name && inventory[i].category === "weapon") {
+            inventory[i].status = "Equipped";
+            break;
+        }
+    }
+
+    text.innerText = "✅ You equipped the " + selected_weapon.name + "!\n";
+    text.innerText += "Damage : " + selected_weapon.damage + "\n";
+    text.innerText += "The weapon is now ready for battle.\n";
+
+    changeWeapon();
+}
+
+function increaseHealth() {
+    update_health_area();
+}
+
+function goNextHealth() {
+    let portion_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "Portions") portion_array.push(inventory[i]);
+    }
+    if (current_health_page < portion_array.length - 1) {
+        current_health_page += 1;
+        update_health_area();
+    }
+}
+
+function goPreviousHealth() {
+    if (current_health_page > 0) {
+        current_health_page -= 1;
+        update_health_area();
+    }
+}
+
+const store_health = [
+    {
+        page_number: 1,
+        "Button Text": ["Next", "Use Portion", "Go Back"],
+        "button_functions": [goNextHealth, usePotion, goBack],
+    },
+    {
+        page_number: 2,
+        "Button Text": ["Previous", "Next", "Use Portion", "Go Back"],
+        "button_functions": [goPreviousHealth, goNextHealth, usePotion, goBack],
+    },
+    {
+        page_number: 3,
+        "Button Text": ["Previous", "Next", "Use Portion", "Go Back"],
+        "button_functions": [goPreviousHealth, goNextHealth, usePotion, goBack],
+    },
+    {
+        page_number: 4,
+        "Button Text": ["Previous", "Use Portion", "Go Back"],
+        "button_functions": [goPreviousHealth, usePotion, goBack],
+    }
+];
+
+function usePotion() {
+    let portion_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "Portions") {
+            portion_array.push(inventory[i]);
+        }
+    }
+
+    if (portion_array.length === 0) {
+        text.innerText = "You have no potions left!";
+        return;
+    }
+
+    let potion = portion_array[current_health_page];
+
+    if (potion.quantity <= 0) {
+        text.innerText = "You have no more " + potion.name + " left!";
+        return;
+    }
+
+    let restored = potion.health_increase;
+    health = Math.min(200, health + restored);
+    healthtext.innerText = health;
+
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].name === potion.name && inventory[i].category === "Portions") {
+            inventory[i].quantity -= 1;
+            break;
+        }
+    }
+
+    text.innerText = "🧪 You used " + potion.name + "!\n";
+    text.innerText += "You restored " + restored + " health.\n";
+    text.innerText += "Current Health : " + health + "\n";
+    text.innerText += "Remaining Quantity : " + (potion.quantity - 1 >= 0 ? potion.quantity - 1 : 0) + "\n";
+
+    update_health_area();
+}
+
+function update_health_area() {
+    let portion_array = [];
+    for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category === "Portions") {
+            portion_array.push(inventory[i]);
+        }
+    }
+
+    if (portion_array.length === 0) {
+        text.innerText = "You have no potions in your inventory.";
+        go_to_store.innerText = "Go Back";
+        go_to_store.onclick = goBack;
+        go_to_cave.style.display = "none";
+        fight_dragon.style.display = "none";
+        go_to_inventory.style.display = "none";
+        return;
+    }
+
+    if (current_health_page >= portion_array.length) {
+        current_health_page = portion_array.length - 1;
+    }
+
+    go_to_cave.style.display = "inline-block";
+    fight_dragon.style.display = "inline-block";
+
+    text.innerText = portion_array[current_health_page].intro_text;
+    text.innerText += "\n \n";
+    text.innerText += "Name : " + portion_array[current_health_page].name + "\n";
+    text.innerText += "Quantity : " + portion_array[current_health_page].quantity + "\n";
+    text.innerText += "Health Restore : " + portion_array[current_health_page].health_increase + "\n";
+
+    go_to_store.innerText = store_health[current_health_page]["Button Text"][0];
+    go_to_cave.innerText = store_health[current_health_page]["Button Text"][1];
+    fight_dragon.innerText = store_health[current_health_page]["Button Text"][2];
+
+    if (current_health_page == 1 || current_health_page == 2) {
+        go_to_inventory.style.display = "inline-block";
+        go_to_inventory.innerText = store_health[current_health_page]["Button Text"][3];
+        go_to_inventory.onclick = store_health[current_health_page]["button_functions"][3];
+    } else {
+        go_to_inventory.style.display = "none";
+    }
+
+    go_to_store.onclick = store_health[current_health_page]["button_functions"][0];
+    go_to_cave.onclick = store_health[current_health_page]["button_functions"][1];
+    fight_dragon.onclick = store_health[current_health_page]["button_functions"][2];
+}
+
+function goBack() {
+    if (previous_location != null) {
+        let tempoary_store = current_location;
+        update(previous_location);
+        previous_location = tempoary_store;
+    }
+}
+
 
