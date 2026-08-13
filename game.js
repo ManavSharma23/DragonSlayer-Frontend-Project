@@ -227,12 +227,94 @@ function goCave() {
 
 function goFight() {}
 function goInventory() {}
-function buyHealth() {}
-function buyWeapons() {}
-function goNext() {}
-function goPrevious() {}
-function goBuy() {}
-function goLeave() {}
+function buyHealth() {
+    if (gold >= 10 && health <= 200) {
+        gold -= 10;
+        goldtext.innerText = gold;
+        if (health < 191) {
+            health += 10;
+            text.innerText = "You bought 10 health.";
+        } else if (health > 190 && health < 200) {
+            health = 200;
+            text.innerText = "Maximum health Reached";
+        } else {
+            health = 200;
+            text.innerText = "Your Health is already full!";
+            gold += 10;
+            goldtext.innerText = gold;
+        }
+
+        healthtext.innerText = health;
+
+    } else {
+        text.innerText = "You don't have enough gold to buy health!";
+    }
+}
+
+function buyWeapons() {
+    current_page = 0;
+    update_store();
+}
+
+function goNext() {
+    if (current_page < Weapons.length - 1) {
+        current_page += 1;
+        update_store();
+    }
+}
+
+function goPrevious() {
+    if (current_page > 0) {
+        current_page -= 1;
+        update_store();
+    }
+}
+
+function goBuy() {
+    go_to_inventory.style.display = "none";
+
+    let available = false;
+    if (gold >= Weapons[current_page].price) {
+        for (let i = 0; i < inventory.length; i++) {
+            if (inventory[i].name == Weapons[current_page].name) {
+                available = true;
+                break;
+            }
+        }
+        if (available == false) {
+            gold -= Weapons[current_page].price;
+            text.innerText = "Congratulations On Buying The " + Weapons[current_page].name + ".";
+            text.innerText += "\nYou can equip this weapon from your inventory.";
+
+            goldtext.innerText = gold;
+            inventory.push({
+                category: "weapon",
+                name: Weapons[current_page].name,
+                damage: Weapons[current_page].damage,
+                price: Weapons[current_page].price,
+                status: "Unequipped",
+                intro_text: Weapons[current_page].intro_text,
+            });
+        } else {
+            text.innerText = "\nYou already have this weapon.";
+        }
+    } else {
+        text.innerText = "You don't have enough gold to buy this weapon.";
+    }
+
+    go_to_store.innerText = "Back To Weapons";
+    go_to_cave.innerText = "Leave Store";
+    fight_dragon.innerText = "Inventory";
+
+    go_to_store.onclick = buyWeapons;
+    go_to_cave.onclick = goTown;
+    fight_dragon.onclick = goInventory;
+}
+
+function goLeave() {
+    goStore();
+}
+
 function fightSlime() {}
 function fightFangBeast() {}
 function fightOgre() {}
