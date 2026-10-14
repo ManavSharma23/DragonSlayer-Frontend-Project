@@ -1,0 +1,14 @@
+{
+  "name": "dragonslayer-rpg",
+  "version": "2.0.0",
+  "description": "Dark fantasy turn-based RPG built with Vanilla JS, HTML5, and CSS3",
+  "type": "module",
+  "scripts": {
+    "start": "npx -y serve .",
+    "dev": "npx -y serve .",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": ["rpg", "game", "vanilla-js", "turn-based"],
+  "author": "",
+  "license": "MIT"
+}
