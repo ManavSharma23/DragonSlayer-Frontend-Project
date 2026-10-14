@@ -4,37 +4,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monster Game</title>
+    <title>DragonSlayer RPG</title>
+    
+    <!-- Inline SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+    
+    <!-- Google Fonts: Cinzel Decorative, Cinzel, Outfit, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="game.css">
 </head>
 
 <body>
-    <div id="game">
-        <div id="player_stats">
-            <span class="stats">XP: <strong><span id="XPtext">0</span></strong></span>
-            <span class="stats">Health: <strong><span id="Healthtext">100</span></strong></span>
-            <span class="stats">Gold: <strong><span id="Goldtext">100</span></strong></span>
+    <!-- Main Full-Screen Game Card Container -->
+    <main id="game-card" class="loc-town">
+        <div id="location-backdrop">
+            <div class="fog-layer"></div>
         </div>
-        <div id="main_buttons">
-            <button class="top_buttons" id="button1">Go To Store</button>
-            <button class="top_buttons" id="button2">Go to Cave</button>
-            <button class="top_buttons" id="button3">Fight Dragon</button>
-            <button class="top_buttons" id="button4">Inventory</button>
-        </div>
-        <div id="monster_stats">
-            <span class="stats">Name: <strong><span id="MonsterName"></span></strong></span>
-            <span class="stats">Health: <strong><span id="monsterhealth"></span></strong></span>
-            <span class="stats">Damage: <strong><span id="monsterdamage"></span></strong></span>
-        </div>
-        <div id="intro_text">
-            <pre id="text">Welcome Dragon Slayer to the Town of Geblery!!
-Our town needs to your help. We have summoned you from your world
-in order to destroy the dragon.
 
-For your next step , Please choose from the above buttons !</pre>
+        <div class="card-content-wrapper">
+            <!-- 1. Top HUD Bar (Exact Match to Screenshot 1) -->
+            <header id="hud-bar">
+                <div class="hud-left-plate">
+                    <div class="level-badge" id="hud-level-badge" title="Character Level">
+                        <span class="label">LEVEL</span>
+                        <span class="val" id="hud-level">1</span>
+                    </div>
+
+                    <div class="bars-cluster">
+                        <!-- HP Progress Bar -->
+                        <div class="bar-wrapper" title="Player Health">
+                            <span class="bar-icon-label hp-label">♥ HP</span>
+                            <div class="progress-track">
+                                <div class="progress-fill hp-fill" id="hud-hp-fill" style="width: 100%;"></div>
+                                <span class="bar-text" id="hud-hp-text">100/100</span>
+                            </div>
+                        </div>
+
+                        <!-- XP Progress Bar -->
+                        <div class="bar-wrapper" title="Experience Points">
+                            <span class="bar-icon-label xp-label">✦ XP</span>
+                            <div class="progress-track">
+                                <div class="progress-fill xp-fill" id="hud-xp-fill" style="width: 0%;"></div>
+                                <span class="bar-text" id="hud-xp-text">0/40</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Filigree Vines & Glowing Cyan Gem Ornament -->
+                <div class="hud-center-ornament" aria-hidden="true">
+                    <svg viewBox="0 0 280 64" class="hud-filigree-svg">
+                        <defs>
+                            <linearGradient id="bronzeVineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#7a461e" stop-opacity="0"/>
+                                <stop offset="25%" stop-color="#b36d33"/>
+                                <stop offset="50%" stop-color="#f59e0b"/>
+                                <stop offset="75%" stop-color="#b36d33"/>
+                                <stop offset="100%" stop-color="#7a461e" stop-opacity="0"/>
+                            </linearGradient>
+                            <radialGradient id="hudTealGem" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#f0fdfa"/>
+                                <stop offset="20%" stop-color="#22d3ee"/>
+                                <stop offset="60%" stop-color="#0284c7"/>
+                                <stop offset="100%" stop-color="#083344"/>
+                            </radialGradient>
+                            <filter id="hudGemGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3.5" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <!-- Top Bronze Tendrils Left & Right -->
+                        <path d="M 140 18 C 115 10, 65 12, 10 6 C 55 13, 95 15, 128 22" fill="none" stroke="url(#bronzeVineGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M 140 18 C 165 10, 215 12, 270 6 C 225 13, 185 15, 152 22" fill="none" stroke="url(#bronzeVineGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Bottom Bronze Tendrils Left & Right -->
+                        <path d="M 140 46 C 115 54, 65 52, 10 58 C 55 51, 95 49, 128 42" fill="none" stroke="url(#bronzeVineGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M 140 46 C 165 54, 215 52, 270 58 C 225 51, 185 49, 152 42" fill="none" stroke="url(#bronzeVineGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Leaf & Curl Filigree Accents -->
+                        <path d="M 105 15 C 95 7, 88 11, 82 13 C 89 17, 98 17, 105 15 Z" fill="#b36d33" opacity="0.85"/>
+                        <path d="M 175 15 C 185 7, 192 11, 198 13 C 191 17, 182 17, 175 15 Z" fill="#b36d33" opacity="0.85"/>
+                        <path d="M 105 49 C 95 57, 88 53, 82 51 C 89 47, 98 47, 105 49 Z" fill="#b36d33" opacity="0.85"/>
+                        <path d="M 175 49 C 185 57, 192 53, 198 51 C 191 47, 182 47, 175 49 Z" fill="#b36d33" opacity="0.85"/>
+                        <!-- Bronze Claw Frame Holding Center Gem -->
+                        <path d="M 140 6 L 158 21 L 158 43 L 140 58 L 122 43 L 122 21 Z" fill="#1b2a32" stroke="#c9803e" stroke-width="2.5"/>
+                        <path d="M 140 10 L 154 23 L 154 41 L 140 54 L 126 41 L 126 23 Z" fill="#0d1b22" stroke="#78350f" stroke-width="1.5"/>
+                        <!-- Glowing Cyan Center Rhombus Gem -->
+                        <polygon points="140,12 153,32 140,52 127,32" fill="url(#hudTealGem)" filter="url(#hudGemGlow)" stroke="#67e8f9" stroke-width="1.5"/>
+                        <!-- Center Gem Specular Facet -->
+                        <polygon points="140,18 147,32 140,46 133,32" fill="#ffffff" opacity="0.55"/>
+                        <line x1="140" y1="12" x2="140" y2="52" stroke="#ffffff" stroke-width="1" opacity="0.8"/>
+                    </svg>
+                </div>
+
+                <!-- Right Group: Gold Pill, Equipment Slots, Audio Toggle -->
+                <div class="hud-right-group">
+                    <div class="hud-gold" id="hud-gold-display" title="Hoarded Gold">
+                        <span class="coin-icon-circle">🪙</span>
+                        <div class="gold-text-cluster">
+                            <span class="gold-label">GOLD</span>
+                            <span class="gold-value" id="hud-gold-text">100</span>
+                        </div>
+                    </div>
+
+                    <div class="hud-equipment">
+                        <div class="equip-slot" id="hud-weapon-slot" title="Equipped Weapon">
+                            <span class="slot-icon">🗡️</span>
+                            <div class="slot-info-stack">
+                                <span class="slot-cat-text">WEAPON</span>
+                                <span class="slot-val-text" id="hud-weapon-text">KNIFE</span>
+                            </div>
+                        </div>
+                        <div class="equip-slot" id="hud-armor-slot" title="Equipped Armor">
+                            <span class="slot-icon">🥋</span>
+                            <div class="slot-info-stack">
+                                <span class="slot-cat-text">ARMOR</span>
+                                <span class="slot-val-text" id="hud-armor-text">CLOTH TUNIC</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hud-actions">
+                        <button class="audio-btn" id="btn-mute-toggle" title="Toggle Sound">
+                            <span id="audio-icon">⚙️</span>
+                            <span id="audio-label">AUDIO ON</span>
+                        </button>
+                        <button class="audio-btn log-hud-btn" id="btn-log-toggle" title="Toggle Game Log">
+                            <span id="log-btn-icon">📜</span>
+                            <span id="log-btn-label">LOG</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 2. Location & Quest Sub-header (Gold Arena Left | Parchment Scroll Right) -->
+            <div class="stage-top-meta">
+                <div class="location-title-tag" id="location-tag">
+                    <span id="location-name-text">TOWN SQUARE OF GEBLERY</span>
+                </div>
+                <div class="quest-hex-pill" id="quest-pill">
+                    <span id="quest-pill-text">QUEST: CLEAR THE INFESTATION (0/3)</span>
+                </div>
+            </div>
+
+            <!-- Screen Center Warning Banner (For Boss encounter flee warning, etc.) -->
+            <div id="screen-warning-banner" class="screen-warning-banner" style="display: none;">
+                <span class="warning-icon">⚠️</span>
+                <span id="screen-warning-text" class="warning-text">You cannot flee from a Boss encounter.</span>
+            </div>
+
+            <!-- 3. Center Scene Area -->
+            <section id="stage-area">
+                <!-- Idle Town Atmosphere Scene with Shield Crest -->
+                <div id="town-scene" class="town-scene-graphic">
+                    <div class="town-emblem-shield">
+                        <span class="town-emblem-cross">✝</span>
+                    </div>
+                    <div class="town-title-ornament">
+                        <span class="filigree-wing">❖ ──</span>
+                        <h2 class="town-title-text" id="town-title">Town of Geblery</h2>
+                        <span class="filigree-wing">── ❖</span>
+                    </div>
+                    <p id="town-desc" class="town-lore-desc">
+                        The ancient garrison stands resilient amidst desolate crags.<br>Prepare your armaments before venturing beyond the gates.
+                    </p>
+                </div>
+
+                <!-- Combat Arena (Player Knight on Left | Monster / Boss on Right) -->
+                <div id="duel-stage" style="display: none;">
+                    <!-- Player Battler (Left) -->
+                    <div class="battler-card" id="player-battler">
+                        <div class="battler-plate">
+                            <span class="battler-name" id="duel-player-name">Player Knight</span>
+                            <div class="battler-hp-bar">
+                                <div class="battler-hp-fill player-hp-fill-style" id="duel-player-hp-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="battler-hp-val" id="duel-player-hp-text">100 / 100 HP</span>
+                        </div>
+                        <div class="sprite-wrapper player-wrapper" id="player-sprite-node">
+                            <!-- Injected player SVG -->
+                        </div>
+                    </div>
+
+                    <!-- Monster Battler (Right) -->
+                    <div class="battler-card" id="monster-battler">
+                        <div class="battler-plate">
+                            <span class="battler-name">
+                                <span id="duel-monster-name">Slime</span>
+                                <span class="boss-badge" id="duel-boss-badge" style="display: none;">BOSS</span>
+                            </span>
+                            <div class="battler-hp-bar">
+                                <div class="battler-hp-fill monster-hp-fill-style" id="duel-monster-hp-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="battler-hp-val" id="duel-monster-hp-text">35 / 35 HP</span>
+                        </div>
+                        <div class="sprite-wrapper monster-wrapper" id="monster-sprite-node">
+                            <!-- Injected monster SVG -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4 & 5. Bottom Console Section (4 Action Buttons) -->
+            <footer id="bottom-console-bar">
+                <nav id="action-buttons-grid" aria-label="Action Controls">
+                    <!-- Dynamically populated buttons -->
+                </nav>
+            </footer>
+        </div>
+
+        <!-- Right Side Column Log Drawer (Triggered by LOG Button) -->
+        <aside id="log-sidebar-drawer" class="log-sidebar-drawer" aria-label="Game and Combat Log Drawer">
+            <div class="log-drawer-header">
+                <div class="log-drawer-title-wrap">
+                    <span class="log-drawer-icon">📜</span>
+                    <h3 class="log-drawer-title">CHRONICLES & LOGS</h3>
+                </div>
+                <button type="button" id="btn-close-log-drawer" class="log-drawer-close-btn" title="Close Log">✕</button>
+            </div>
+            <div id="log-container" class="log-drawer-body" aria-label="Game and Combat Log">
+                <div class="log-entry">
+                    <span class="log-system-badge">LISTEN</span>
+                    <span class="log-time-text">[00:46:25]</span>
+                    <span class="log-msg">Welcome, warrior, to the realm of Geblery. Select an action below.</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Boss Intro Dark Overlay -->
+        <div id="boss-intro-overlay">
+            <h1 class="boss-intro-title">BOSS FIGHT<br><span style="font-size: 20px; color: #ffd700;">DRAGON OF ZANDARIOUS</span></h1>
+            <p style="color: #ff9999; font-size: 15px; text-align: center; max-width: 500px; line-height: 1.6;">
+                The earth shakes violently as molten fire illuminates the cavern ceiling. The apex predator descends.
+            </p>
+            <button class="action-btn btn-boss" id="boss-intro-engage-btn">ENGAGE TARGET</button>
+        </div>
+
+        <!-- Level Up Notification Banner -->
+        <div id="level-up-toast">
+            <span style="font-family: var(--font-heading); font-size: 13px; color: var(--gold-bright); letter-spacing: 2px;">LEVEL UP</span>
+            <span style="font-size: 14px; color: #fff;" id="level-up-text">Level 2 Reached</span>
+        </div>
+    </main>
+
+    <!-- UI Hover Tooltip -->
+    <div id="ui-tooltip">
+        <div class="tooltip-title" id="tooltip-title">Knife</div>
+        <div class="tooltip-desc" id="tooltip-desc">A simple blade.</div>
+        <div class="tooltip-stat" id="tooltip-stat">Damage: +10</div>
+    </div>
+
+    <!-- Start / Title Screen (Exact Match to Image 4) -->
+    <div class="start-overlay" id="modal-start">
+        <div class="start-ornament-box">
+            <div class="start-dragon-crest-seal">
+                <span class="crest-wings-left"></span>
+                <div class="crest-inner-ring">
+                    <span class="crest-dragon-icon">🐲</span>
+                </div>
+                <span class="crest-wings-right"></span>
+            </div>
+            <h1 class="start-title">DRAGONSLAYER RPG</h1>
+            <p class="start-lore">
+                Geblery teeters on ruin. Arm yourself with forged steel, vanquish subterranean monstrosities, and defeat the ancient dragon.
+            </p>
+            <button class="start-adventure-btn" id="btn-new-game">
+                START ADVENTURE
+            </button>
+        </div>
+        <div class="start-screen-keys-pill">
+            <span>Keys 1, 2, 3, 4</span>
         </div>
     </div>
-    <script src="game.js"></script>
+
+    <!-- Shop Modal with 3 Tabs + Bottom Preview Panel -->
+    <div class="modal-overlay" id="modal-shop">
+        <div class="shop-royal-card">
+            <div class="shop-header-stack">
+                <div class="shop-header-left">
+                    <span class="shop-bag-icon">💰</span>
+                    <div>
+                        <h2 class="shop-title-text">DRAGONAISE ARMORY & ALCHEMY</h2>
+                        <span class="shop-subtitle-text">Quality gear. Greater adventures.</span>
+                    </div>
+                </div>
+                <button class="close-modal-btn">✕</button>
+            </div>
+
+            <!-- 3 Category Tabs -->
+            <div class="shop-tabs-bar">
+                <button class="shop-tab-btn active" id="shop-tab-potions" data-category="potions">
+                    <span>⚗️</span>
+                    <span>ELIXIRS & POTIONS</span>
+                </button>
+                <button class="shop-tab-btn" id="shop-tab-weapons" data-category="weapons">
+                    <span>⚔️</span>
+                    <span>WEAPONS</span>
+                </button>
+                <button class="shop-tab-btn" id="shop-tab-armor" data-category="armor">
+                    <span>🛡️</span>
+                    <span>ARMORY</span>
+                </button>
+            </div>
+
+            <!-- Items List (full width) -->
+            <div class="shop-items-pane" id="shop-item-list">
+                <!-- Injected via shop manager -->
+            </div>
+
+            <!-- Item Preview Panel (full width at bottom, shown when item clicked) -->
+            <div class="shop-preview-pane" id="shop-preview-pane">
+                <!-- Selected Item Preview injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Modal (Adventurer's Inventory) -->
+    <div class="modal-overlay" id="modal-inventory">
+        <div class="inv-royal-card">
+            <!-- Ornamental corner brackets -->
+            <div class="inv-corner inv-corner-tl"></div>
+            <div class="inv-corner inv-corner-tr"></div>
+            <div class="inv-corner inv-corner-bl"></div>
+            <div class="inv-corner inv-corner-br"></div>
+            <div class="inv-star-top">✦</div>
+            <div class="inv-star-bottom">✦</div>
+
+            <div class="inv-header-stack">
+                <div class="inv-header-left">
+                    <div class="inv-bag-icon-frame">
+                        <svg viewBox="0 0 100 100" class="inv-backpack-svg">
+                            <defs>
+                                <radialGradient id="bpGrad" cx="40%" cy="30%" r="70%">
+                                    <stop offset="0%" stop-color="#dc2626"/>
+                                    <stop offset="50%" stop-color="#991b1b"/>
+                                    <stop offset="100%" stop-color="#450a0a"/>
+                                </radialGradient>
+                                <linearGradient id="bpGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fef08a"/>
+                                    <stop offset="50%" stop-color="#eab308"/>
+                                    <stop offset="100%" stop-color="#854d0e"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Backpack Body -->
+                            <rect x="22" y="24" width="56" height="66" rx="14" fill="url(#bpGrad)" stroke="url(#bpGold)" stroke-width="2.5"/>
+                            <!-- Front flap -->
+                            <path d="M 24 38 Q 50 48 76 38 L 72 66 Q 50 72 28 66 Z" fill="#7f1d1d" stroke="url(#bpGold)" stroke-width="2"/>
+                            <!-- Gold Crest on Flap -->
+                            <circle cx="50" cy="54" r="8" fill="none" stroke="url(#bpGold)" stroke-width="1.8"/>
+                            <path d="M 50 48 L 50 60 M 44 54 L 56 54 M 46 50 L 54 58 M 46 58 L 54 50" stroke="url(#bpGold)" stroke-width="1.5"/>
+                            <!-- Buckles & Straps -->
+                            <line x1="36" y1="26" x2="36" y2="88" stroke="url(#bpGold)" stroke-width="2"/>
+                            <line x1="64" y1="26" x2="64" y2="88" stroke="url(#bpGold)" stroke-width="2"/>
+                            <rect x="33" y="60" width="6" height="8" rx="1" fill="#fef08a" stroke="#78350f" stroke-width="1"/>
+                            <rect x="61" y="60" width="6" height="8" rx="1" fill="#fef08a" stroke="#78350f" stroke-width="1"/>
+                            <!-- Top Handle -->
+                            <path d="M 38 24 Q 50 10 62 24" fill="none" stroke="url(#bpGold)" stroke-width="3.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="inv-header-titles">
+                        <h2 class="inv-title-text">ADVENTURER'S INVENTORY</h2>
+                        <span class="inv-subtitle-text">Equip armaments and quaff potions.</span>
+                    </div>
+                </div>
+                <button class="inv-close-btn close-modal-btn" aria-label="Close Inventory">✕</button>
+            </div>
+            
+            <div class="inv-divider-line">
+                <span class="inv-divider-star">✦</span>
+            </div>
+
+            <div class="inv-modal-grid" id="inventory-item-list">
+                <!-- Injected dynamically via ui.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Combat Reward Popup (gold/xp earned on monster defeat) -->
+    <div id="combat-reward-popup" class="combat-reward-popup" aria-live="polite">
+        <div class="reward-popup-inner">
+            <div class="reward-popup-header">
+                <span class="reward-popup-icon">⚔️</span>
+                <span class="reward-popup-title">VICTORY!</span>
+            </div>
+            <div class="reward-popup-monster-name" id="reward-monster-name">Toxic Slime Defeated</div>
+            <div class="reward-popup-divider">— ✦ —</div>
+            <div class="reward-popup-rows">
+                <div class="reward-row reward-gold">
+                    <span class="reward-icon">🪙</span>
+                    <span class="reward-label">GOLD EARNED</span>
+                    <span class="reward-value" id="reward-gold-value">+0</span>
+                </div>
+                <div class="reward-row reward-xp">
+                    <span class="reward-icon">✦</span>
+                    <span class="reward-label">XP EARNED</span>
+                    <span class="reward-value" id="reward-xp-value">+0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Potion Selection Modal -->
+    <div class="modal-overlay" id="modal-potion-select">
+        <div class="potion-select-card">
+            <div class="potion-select-header">
+                <span class="potion-select-icon">🧪</span>
+                <h2 class="potion-select-title">CHOOSE A POTION</h2>
+                <button class="inv-close-btn close-modal-btn" id="btn-close-potion-select" aria-label="Close">✕</button>
+            </div>
+            <div class="potion-select-divider">— ✦ —</div>
+            <div class="potion-select-list" id="potion-select-list">
+                <!-- Injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal-overlay" id="modal-gameover">
+        <div class="shop-royal-card" style="text-align: center; border-color: var(--crimson); align-items: center;">
+            <h1 class="shop-title-text" style="color: var(--crimson);">DEFEAT</h1>
+            <div id="gameover-stats" style="color: var(--text-muted); font-size: 14px; line-height: 1.8; width: 100%;"></div>
+            <button class="action-btn btn-boss" id="btn-retry" style="margin-top: 14px; width: 220px; justify-content: center; text-align: center;">RETRY</button>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div class="modal-overlay" id="modal-victory">
+        <div class="shop-royal-card" style="text-align: center; border-color: var(--gold-bright); align-items: center;">
+            <h1 class="shop-title-text" style="color: var(--gold-bright);">VICTORY ACHIEVED</h1>
+            <div id="victory-stats" style="color: var(--text-muted); font-size: 14px; line-height: 1.8; width: 100%;"></div>
+            <button class="action-btn" id="btn-play-again" style="margin-top: 14px; width: 220px; justify-content: center; text-align: center;">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script type="module" src="game.js"></script>
 </body>
 
 </html>

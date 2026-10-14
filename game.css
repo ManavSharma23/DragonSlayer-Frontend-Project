@@ -1,66 +1,2528 @@
-/* main css */
+/* ==========================================================================
+   DRAGON SLAYER RPG - PREMIUM AAA DARK FANTASY STYLESHEET
+   Accurately crafted to match the exact aesthetic, gold-trimmed filigrees,
+   glassmorphism panels, and royal blue accents of the reference screenshots.
+   ========================================================================== */
+
+:root {
+    --bg-dark: #040711;
+    --navy-deep: #080e1a;
+    --navy-panel: rgba(9, 15, 28, 0.88);
+    --navy-card: rgba(13, 22, 40, 0.92);
+    --navy-slot: rgba(14, 25, 46, 0.85);
+    
+    --gold: #d4af37;
+    --gold-bright: #ffd700;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --gold-dim: #7a6222;
+    --gold-border: #a38234;
+    
+    --cyan-border: #0284c7;
+    --cyan-glow: rgba(56, 189, 248, 0.35);
+    --cyan-text: #38bdf8;
+    
+    --crimson: #e63946;
+    --crimson-border: #b91c1c;
+    --crimson-glow: rgba(230, 57, 70, 0.45);
+    
+    --text-white: #ffffff;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    
+    --font-heading: 'Cinzel', serif;
+    --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --border-gold-card: 1.5px solid #a38234;
+    --border-blue-card: 1.5px solid rgba(56, 189, 248, 0.35);
+    --border-radius: 8px;
+    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: var(--font-body);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+}
 
 body {
-    background-color: blue;
-    font-weight: 600;
-}
-
-#game {
-    background-color: lightgrey;
-    padding: 15px;
-    max-width: fit-content;
-    max-height: fit-content;
-    border-radius: 10px;
-    border-color: gold;
-    border-style: solid;
-    width: 95%;
-    margin: 20px auto;
-}
-
-#intro_text {
-    background-color: black;
-    color: red;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    border-style: solid;
-    border-color: yellow;
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-#text {
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin: 0;
-}
-
-#player_stats {
-    border: 3px solid black;
     display: flex;
-    gap: 25px;
-    padding: 5px;
-    margin: 10px;
-    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
-#monster_stats {
+/* ==========================================================================
+   MAIN GAME VIEWPORT CARD
+   ========================================================================== */
+#game-card {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: var(--navy-deep);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   SCENIC BACKGROUND WITH AMBIENT VIGNETTE
+   ========================================================================== */
+#location-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background-size: cover;
+    background-position: center center;
+    transition: background-image 0.6s ease-in-out;
+}
+
+#location-backdrop::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(4, 7, 17, 0.15) 30%, rgba(4, 7, 17, 0.85) 100%),
+        linear-gradient(180deg, rgba(6, 11, 22, 0.75) 0%, rgba(6, 11, 22, 0.2) 25%, rgba(6, 11, 22, 0.2) 75%, rgba(4, 7, 17, 0.9) 100%);
+    pointer-events: none;
+}
+
+.loc-town #location-backdrop { background-image: url('assets/backgrounds/town.jpg'); }
+.loc-store #location-backdrop { background-image: url('assets/backgrounds/store.jpg'); }
+.loc-cave #location-backdrop { background-image: url('assets/backgrounds/cave.jpg'); }
+.loc-dragon #location-backdrop { background-image: url('assets/backgrounds/dragon.jpg'); }
+
+.card-content-wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 98%;
+    max-width: 1550px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 14px 20px;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   1. TOP HUD BAR (EXACT SCREENSHOT 1 MATCH - SINGLE LINE)
+   ========================================================================== */
+#hud-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 18px;
+    background: linear-gradient(180deg, #1a2a35 0%, #121e26 50%, #0d161d 100%);
+    border: 2px solid #2b4555;
+    border-radius: 12px;
+    box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.85),
+        inset 0 1px 2px rgba(80, 200, 220, 0.25),
+        inset 0 -2px 5px rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
+    min-height: 72px;
+    position: relative;
+    overflow: visible;
+}
+
+/* 1A. Left Recessed Stone Plaque: Level Badge + Health/XP Bars */
+.hud-left-plate {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(7, 14, 20, 0.82);
+    border: 1.5px solid #1e3544;
+    border-radius: 8px;
+    padding: 6px 12px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.85);
+    flex-shrink: 0;
+}
+
+/* Level Stone Plaque (Exact Screenshot 1 Match) */
+.level-badge {
+    position: relative;
+    width: 48px;
+    height: 46px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #152530 0%, #0a131a 100%);
+    border: 1.5px solid #284455;
+    border-radius: 6px;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        0 2px 6px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+}
+
+.level-badge span.label {
+    font-family: var(--font-heading);
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    color: #7ec4cf;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.level-badge span.val {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* HP and XP Bars Cluster */
+.bars-cluster {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 230px;
+    flex-shrink: 0;
+}
+
+.bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bar-icon-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    width: 44px;
+    flex-shrink: 0;
+}
+
+.bar-icon-label.hp-label { 
+    color: #f87171; 
+    text-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.bar-icon-label.xp-label { 
+    color: #38bdf8; 
+    text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+.progress-track {
+    flex: 1;
+    height: 16px;
+    background: #060c12;
+    border-radius: 8px;
+    border: 1px solid #1a3240;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.95);
+}
+
+.progress-fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hp-fill {
+    background: linear-gradient(90deg, #be123c 0%, #f43f5e 60%, #fb7185 100%);
+    box-shadow: 0 0 10px rgba(244, 63, 94, 0.7);
+}
+
+.xp-fill {
+    background: linear-gradient(90deg, #0284c7 0%, #06b6d4 60%, #22d3ee 100%);
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+}
+
+.bar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+/* 1B. Center Bronze Filigree & Glowing Teal Gem Ornament */
+.hud-center-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    width: 250px;
+    flex-shrink: 0;
+    pointer-events: none;
+    margin: 0 auto;
+}
+
+.hud-filigree-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+}
+
+/* 1C. Right Group: Gold, Weapon, Armor, Audio */
+.hud-right-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Gold Pill Capsule */
+.hud-gold {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(9, 18, 25, 0.88);
+    border: 1.5px solid #233e4f;
+    border-radius: 20px;
+    padding: 6px 16px;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+}
+
+.coin-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.7));
+}
+
+.gold-text-cluster {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-heading);
+}
+
+.gold-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #c5a059;
+    font-weight: 800;
+}
+
+.gold-value {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+/* Equipment Slots */
+.hud-equipment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.equip-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(9, 18, 25, 0.88);
+    border: 1.5px solid #233e4f;
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.equip-slot:hover {
+    border-color: #38bdf8;
+    background: rgba(14, 28, 40, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.slot-icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.slot-info-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.slot-cat-text {
+    font-family: var(--font-heading);
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    color: #c5a059;
+    font-weight: 800;
+}
+
+.slot-val-text {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+/* Audio Toggle Button */
+.hud-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.audio-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(9, 18, 25, 0.88);
+    border: 1.5px solid #233e4f;
+    border-radius: 20px;
+    padding: 7px 16px;
+    color: #e2f1f8;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.audio-btn:hover {
+    border-color: #38bdf8;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+
+/* Hover Tooltip Box */
+#ui-tooltip {
+    position: fixed;
+    z-index: 9999;
+    background: rgba(8, 14, 28, 0.96);
+    border: 1.5px solid var(--gold);
+    border-radius: 8px;
+    padding: 10px 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 10px var(--gold-glow);
+    pointer-events: none;
     display: none;
-    border: 3px solid black;
-    padding: 5px;
-    gap: 35px;
-    margin: 10px;
-    border-radius: 5px;
-    color: brown;
+    max-width: 260px;
+    font-size: 13px;
+}
+
+.tooltip-title {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 3px;
+}
+
+.tooltip-desc {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 5px;
+}
+
+.tooltip-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #34d399;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   2. STAGE META: GOLD ARENA TITLE + PARCHMENT SCROLL QUEST (SCREENSHOT 1)
+   ========================================================================== */
+.stage-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.location-title-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #e5c158;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 12px rgba(229, 193, 88, 0.4);
+    text-transform: uppercase;
+}
+
+/* Parchment Scroll Banner with Curled Ends (Exact Screenshot 1 Match) */
+.quest-hex-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #f0e2be 0%, #deb887 60%, #c99e6b 100%);
+    color: #3b220c;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 6px 20px;
+    border-top: 1px solid #ebd2a4;
+    border-bottom: 2px solid #6b4317;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.6), 
+        inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    border-radius: 2px;
+}
+
+.quest-hex-pill::before,
+.quest-hex-pill::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 10px;
+    background: radial-gradient(ellipse at center, #eedbb5 0%, #b8864e 80%, #6e4418 100%);
+    border: 1px solid #5a3510;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.quest-hex-pill::before {
+    left: -7px;
+    border-radius: 5px 0 0 5px;
+    border-right: none;
+}
+
+.quest-hex-pill::after {
+    right: -7px;
+    border-radius: 0 5px 5px 0;
+    border-left: none;
+}
+
+/* ==========================================================================
+   3. CENTER SCENE (OR DUEL COMBAT)
+   ========================================================================== */
+#stage-area {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Center Town Scene Glass Box */
+.town-scene-graphic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    background: rgba(6, 12, 24, 0.72);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 12px;
+    padding: 24px 36px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.town-emblem-shield {
+    width: 64px;
+    height: 72px;
+    background: linear-gradient(180deg, #1b263b 0%, #0d1527 100%);
+    clip-path: polygon(50% 0%, 100% 12%, 100% 75%, 50% 100%, 0% 75%, 0% 12%);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px var(--gold-glow);
+}
+
+.town-emblem-cross {
+    font-size: 32px;
+    color: var(--gold-bright);
+    font-weight: 900;
+}
+
+.town-title-ornament {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.town-title-text {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    color: #fff;
+    font-weight: 800;
+    text-shadow: 0 2px 6px #000;
+}
+
+.filigree-wing {
+    color: var(--gold-bright);
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+.town-lore-desc {
+    color: #e2e8f0;
+    font-size: 15px;
+    max-width: 600px;
+    line-height: 1.8;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+}
+
+/* Active Combat Duel Stage (Lifted into Middle of Viewport) */
+#duel-stage {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 25px;
+    margin-top: -15px;
+}
+
+.battler-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.sprite-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: idleBreathing 3.6s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
+.player-wrapper { width: 220px; height: 240px; }
+.monster-wrapper { width: 200px; height: 220px; }
+.monster-wrapper.boss-scale { width: 440px; height: 380px; }
+
+@keyframes idleBreathing {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.025, 0.98) translateY(-4px); }
+}
+
+.battler-plate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(8, 14, 26, 0.94);
+    border: 1.5px solid var(--gold-border);
+    padding: 8px 18px;
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.battler-name {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Boss Intro Dark Overlay (Hidden by default, only shown when Dragon boss fight starts) */
+#boss-intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(14, 2, 4, 0.94);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+#boss-intro-overlay.active {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.boss-intro-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    color: #ef4444;
+    letter-spacing: 4px;
+    animation: bossPulse 0.9s infinite alternate;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
     text-align: center;
 }
 
-#main_buttons {
-    border: 3px solid black;
+@keyframes bossPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+}
+
+/* Level Up Toast Banner (Hidden by default) */
+#level-up-toast {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: linear-gradient(135deg, #191404 0%, #2f2305 100%);
+    border: 1.5px solid var(--gold);
+    border-radius: 8px;
+    padding: 12px 24px;
     display: flex;
-    gap: 25px;
-    padding: 5px;
-    margin: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 90;
+    box-shadow: 0 0 30px var(--gold-glow);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#level-up-toast.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.battler-hp-bar {
+    width: 100%;
+    height: 10px;
+    background: #090e1a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 5px;
+    overflow: hidden;
+}
+
+.battler-hp-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+    transition: width 0.3s ease;
+}
+
+.battler-hp-val {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #cbd5e1;
+}
+
+/* LOG Button in HUD */
+.log-hud-btn {
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #e2f1f8;
+}
+
+.log-hud-btn.active {
+    border-color: #38bdf8;
+    background: rgba(14, 165, 233, 0.25);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+    color: #ffffff;
+}
+
+/* Screen Center Warning Banner (For Boss encounter flee warning, etc.) */
+.screen-warning-banner {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: linear-gradient(135deg, rgba(60, 10, 15, 0.96) 0%, rgba(25, 4, 6, 0.98) 100%);
+    border: 1.8px solid #ef4444;
+    border-radius: 8px;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1500;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.65), 0 4px 20px rgba(0, 0, 0, 0.9);
+    animation: warningPulse 1.2s infinite alternate;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.screen-warning-banner .warning-icon {
+    font-size: 18px;
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+}
+
+.screen-warning-banner .warning-text {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 100, 100, 0.8);
+    text-transform: uppercase;
+}
+
+@keyframes warningPulse {
+    from { box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+    to { box-shadow: 0 0 30px rgba(239, 68, 68, 0.85); }
+}
+
+/* ==========================================================================
+   4. RIGHT-SIDE LOG DRAWER (COLUMN FORMAT ON RIGHT HAND SIDE)
+   ========================================================================== */
+.log-sidebar-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 90vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #13222c 0%, #0c161d 50%, #070e13 100%);
+    border-left: 2px solid #2b4555;
+    box-shadow: -8px 0 35px rgba(0, 0, 0, 0.9);
+    z-index: 2500;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.log-sidebar-drawer.open {
+    transform: translateX(0);
+}
+
+.log-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(5, 10, 15, 0.8);
+    border-bottom: 1.5px solid #1e3544;
+}
+
+.log-drawer-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.log-drawer-icon {
+    font-size: 20px;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+.log-drawer-title {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #e2f1f8;
+}
+
+.log-drawer-close-btn {
+    background: transparent;
+    border: none;
+    color: #7d9cb0;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.log-drawer-close-btn:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.log-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: rgba(7, 14, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* LISTEN Pill Badge (Exact Screenshot 2 Match) */
+.log-system-badge {
+    font-family: var(--font-heading);
+    font-size: 9px;
+    letter-spacing: 1px;
+    background: rgba(14, 165, 233, 0.2);
+    border: 1.2px solid rgba(56, 189, 248, 0.55);
+    color: #38bdf8;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.log-time-text {
+    color: #648ba0;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.log-msg { 
+    color: #cbdbe3; 
+    font-size: 12px;
+    word-break: break-word;
+    flex: 1;
+}
+
+.log-msg.damage-in { color: #f87171; }
+.log-msg.damage-out { color: #e2e8f0; }
+.log-msg.crit { color: #fbbf24; font-weight: 700; }
+.log-msg.heal { color: #34d399; }
+.log-msg.loot { color: #fde047; font-weight: 700; }
+.log-msg.defend { color: #60a5fa; }
+.log-msg.boss { color: #ef4444; font-weight: 700; }
+
+/* 4 Action Buttons Grid (Exact Screenshot 2 Match) */
+#action-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+}
+
+.action-btn {
+    position: relative;
+    height: 52px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, #182c36 0%, #101e25 60%, #0a1318 100%);
+    border: 1.8px solid #2e4d5e;
+    color: #ffffff;
+    font-family: var(--font-heading);
+    box-shadow: 
+        inset 0 1px 2px rgba(80, 200, 220, 0.25),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.8),
+        0 4px 12px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px 0 4px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: visible;
+    user-select: none;
+    text-decoration: none;
+}
+
+#boss-intro-engage-btn {
+    justify-content: center;
+    padding: 14px 36px;
+    width: auto;
+    min-width: 200px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    color: #ffcccc !important;
+    text-shadow: 0 0 10px rgba(255, 100, 100, 0.7);
+}
+
+#boss-intro-engage-btn:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 15px rgba(255, 50, 50, 0.9);
+}
+
+/* Attack Button: Special Teal/Cyan Illuminated Glow (Screenshot Match) */
+.action-btn.btn-attack {
+    background: linear-gradient(180deg, #153e48 0%, #0d2931 60%, #081a20 100%);
+    border-color: #38bdf8;
+    box-shadow: 
+        inset 0 0 12px rgba(56, 189, 248, 0.35),
+        0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+.action-btn:hover:not(:disabled) {
+    border-color: #38bdf8;
+    box-shadow: 
+        0 0 20px rgba(56, 189, 248, 0.65),
+        inset 0 0 12px rgba(56, 189, 248, 0.35);
+    transform: translateY(-2px);
+}
+
+.action-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.action-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+}
+
+.action-btn.btn-boss {
+    background: linear-gradient(180deg, #3d0c10 0%, #1e0508 100%);
+    border-color: #dc2626;
+    color: #ffcccc;
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.35);
+}
+
+.action-btn.btn-boss:hover:not(:disabled) {
+    border-color: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.65);
+}
+
+/* Illustrated Icon Anchor on Left */
+.btn-illus-anchor {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.8));
+    margin-left: -2px;
+}
+
+.btn-illus-svg {
+    width: 38px;
+    height: 38px;
+    overflow: visible;
+}
+
+.btn-emoji-icon {
+    font-size: 22px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+/* Center Text Cluster: Prefix + Action Label */
+.btn-title-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.btn-prefix-mark {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 800;
+    color: #a5f3fc;
+    text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+.btn-label-text {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    text-transform: uppercase;
+}
+
+/* Right Decorative Bracket with Embedded Glowing Cyan Diamond Gem */
+.btn-gem-bracket {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.btn-diamond-gem {
+    width: 12px;
+    height: 12px;
+    transform: rotate(45deg);
+    background: radial-gradient(circle, #e0ffff 20%, #00f0ff 65%, #0284c7 100%);
+    border: 1.2px solid #a5f3fc;
+    box-shadow: 
+        0 0 8px #00f0ff,
+        0 0 14px rgba(0, 240, 255, 0.75);
+    border-radius: 1px;
+}
+
+.btn-diamond-gem.gem-red {
+    background: radial-gradient(circle, #fee2e2 20%, #ef4444 65%, #7f1d1d 100%);
+    border-color: #fca5a5;
+    box-shadow: 
+        0 0 8px #ef4444,
+        0 0 14px rgba(239, 68, 68, 0.75);
+}
+
+.key-badge {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: #64748b;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   6. SHOP MODAL: ROYAL BLUE CARD WITH GOLD TRIM (EXACT SCREENSHOT 2 MATCH)
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(3, 6, 14, 0.88);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.shop-royal-card {
+    background: radial-gradient(ellipse at 30% 0%, #0f2040 0%, #070e1e 50%, #030810 100%);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.97), 0 0 30px var(--gold-glow), inset 0 0 40px rgba(0, 0, 0, 0.6);
+    max-width: 780px;
+    width: 95%;
+    max-height: 92vh;
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Subtle background texture pattern */
+.shop-royal-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.shop-royal-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.shop-header-stack {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1.5px solid var(--gold-dim);
+    padding-bottom: 14px;
+}
+
+.shop-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.shop-bag-icon {
+    font-size: 34px;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+}
+
+.shop-title-text {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--gold-bright);
+    font-weight: 800;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.shop-subtitle-text {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.close-modal-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-modal-btn:hover { color: #fff; }
+
+/* Category Navigation Tabs (3 separate: Elixirs, Weapons, Armor) */
+.shop-tabs-bar {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding-bottom: 10px;
+}
+
+.shop-tab-btn {
+    background: rgba(8, 16, 32, 0.9);
+    border: 1.5px solid rgba(56, 189, 248, 0.25);
+    border-radius: 8px;
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+}
+
+.shop-tab-btn:hover {
+    color: #cbd5e1;
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(18, 32, 60, 0.9);
+}
+
+.shop-tab-btn.active {
+    background: linear-gradient(135deg, #1a3360 0%, #0d1e42 100%);
+    border-color: var(--gold);
+    color: var(--gold-bright);
+    box-shadow: 0 0 16px var(--gold-glow), inset 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+/* Items List – horizontal rows, no scroll needed for 3-4 items */
+.shop-items-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.shop-items-pane::-webkit-scrollbar {
+    width: 5px;
+}
+.shop-items-pane::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+.shop-items-pane::-webkit-scrollbar-thumb {
+    background: var(--gold-dim);
+    border-radius: 3px;
+}
+
+/* Clickable item card */
+.shop-row-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10, 20, 40, 0.8);
+    border: 1.5px solid rgba(56, 189, 248, 0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    gap: 14px;
+    transition: all 0.18s ease;
+    cursor: pointer;
+}
+
+.shop-row-card:hover {
+    border-color: rgba(212, 175, 55, 0.7);
+    background: rgba(16, 30, 58, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.shop-row-card.selected-item {
+    border-color: var(--gold-bright);
+    background: rgba(22, 42, 80, 0.98);
+    box-shadow: 0 0 18px var(--gold-glow), inset 0 0 10px rgba(212, 175, 55, 0.08);
+}
+
+.shop-item-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.shop-item-icon-box {
+    width: 44px;
+    height: 44px;
+    background: rgba(4, 8, 18, 0.9);
+    border: 1.5px solid rgba(56, 189, 248, 0.35);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.shop-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.shop-item-name {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #e2e8f0;
+    font-weight: 700;
+}
+
+.shop-item-stat {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #64748b;
+}
+
+.shop-item-stat span.stat-num {
+    color: var(--gold-bright);
+    font-weight: 700;
+}
+
+.shop-click-hint {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    color: #475569;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.shop-row-card.selected-item .shop-click-hint {
+    color: var(--gold-bright);
+}
+
+/* ============================================================
+   BOTTOM ITEM PREVIEW PANEL — Full Width, Rich Design
+   ============================================================ */
+.shop-preview-pane {
+    background: linear-gradient(135deg, #0a1830 0%, #050d1e 60%, #040812 100%);
+    border: 1.5px solid rgba(212, 175, 55, 0.6);
+    border-radius: 12px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Gold accent line at top of preview */
+.shop-preview-pane::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-bright), var(--gold), transparent);
+}
+
+/* Hidden by default, shown when item is selected */
+.shop-preview-pane.hidden {
+    display: none;
+}
+
+.preview-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: #334155;
+    text-align: center;
+    gap: 10px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+/* Horizontal layout for bottom panel: icon+text left, stats+buy right */
+.preview-body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+    min-height: 180px;
+}
+
+.preview-left-col {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.preview-right-col {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: space-between;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.preview-icon-large {
+    width: 64px;
+    height: 64px;
+    background: radial-gradient(circle at 35% 35%, #0f2040 0%, #040914 100%);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 0 20px var(--gold-glow), inset 0 0 15px rgba(0, 0, 0, 0.6);
+    flex-shrink: 0;
+}
+
+.preview-title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.preview-category-badge {
+    font-family: var(--font-heading);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #38bdf8;
+    text-transform: uppercase;
+}
+
+.preview-name {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gold-bright);
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+.preview-quote-box {
+    background: rgba(8, 18, 38, 0.8);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+}
+
+.preview-quote-text {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #c1cfe0;
+}
+
+/* Stats on the right side */
+.preview-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.preview-stat-row:last-child {
+    border-bottom: none;
+}
+
+.preview-stat-label {
+    color: #64748b;
+    font-family: var(--font-heading);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.preview-stat-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.preview-stat-val.val-gold {
+    color: var(--gold-bright);
+    font-size: 15px;
+}
+
+/* Buy button at bottom of right column */
+.preview-buy-action {
+    margin-top: auto;
+}
+
+.shop-buy-pill {
+    background: linear-gradient(135deg, #1a3a6a 0%, #0c1e3e 100%);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-heading);
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--gold-bright);
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 18px var(--gold-glow), inset 0 0 10px rgba(212, 175, 55, 0.1);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.shop-buy-pill:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px rgba(212, 175, 55, 0.8), inset 0 0 16px rgba(212, 175, 55, 0.2);
+    background: linear-gradient(135deg, #20468a 0%, #102550 100%);
+    color: #fff;
+}
+
+.shop-buy-pill:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: #374151;
+    color: #6b7280;
+    box-shadow: none;
+}
+
+
+
+
+/* ==========================================================================
+   ADVENTURER'S INVENTORY MODAL (EXACT SCREENSHOT MATCH)
+   Deep dark royal navy background, double gold borders, ornamental corner
+   filigrees, custom glowing potions, and gold equipped states.
+   ========================================================================== */
+.inv-royal-card {
+    background: radial-gradient(ellipse at 50% 20%, #0d1e3a 0%, #050b18 70%, #020610 100%);
+    border: 2px solid #b8860b;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(212, 175, 55, 0.35), inset 0 0 20px rgba(3, 10, 24, 0.9);
+    max-width: 740px;
+    width: 95%;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Ornamental corner filigrees and star accents */
+.inv-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+}
+.inv-corner-tl {
+    top: 6px;
+    left: 6px;
+    border-top: 2px solid #ffd700;
+    border-left: 2px solid #ffd700;
+}
+.inv-corner-tr {
+    top: 6px;
+    right: 6px;
+    border-top: 2px solid #ffd700;
+    border-right: 2px solid #ffd700;
+}
+.inv-corner-bl {
+    bottom: 6px;
+    left: 6px;
+    border-bottom: 2px solid #ffd700;
+    border-left: 2px solid #ffd700;
+}
+.inv-corner-br {
+    bottom: 6px;
+    right: 6px;
+    border-bottom: 2px solid #ffd700;
+    border-right: 2px solid #ffd700;
+}
+
+.inv-star-top {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd700;
+    font-size: 16px;
+    text-shadow: 0 0 8px #ffd700;
+}
+
+.inv-star-bottom {
+    position: absolute;
+    bottom: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd700;
+    font-size: 16px;
+    text-shadow: 0 0 8px #ffd700;
+}
+
+/* Inventory Header */
+.inv-header-stack {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 4px;
+}
+
+.inv-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.inv-bag-icon-frame {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.5));
+}
+
+.inv-backpack-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.inv-header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.inv-title-text {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #ffd700;
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.inv-subtitle-text {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 13px;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+.inv-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #061124;
+    border: 1.5px solid #d4af37;
+    color: #ffd700;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6), inset 0 0 6px rgba(212, 175, 55, 0.2);
+}
+
+.inv-close-btn:hover {
+    color: #fff;
+    border-color: #ffd700;
+    transform: scale(1.08);
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.6);
+}
+
+.inv-divider-line {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b8860b 20%, #ffd700 50%, #b8860b 80%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0 6px 0;
+}
+
+.inv-divider-star {
+    position: absolute;
+    color: #ffd700;
+    font-size: 13px;
+    background: #081120;
+    padding: 0 6px;
+    text-shadow: 0 0 6px #ffd700;
+}
+
+/* Modal Content Grid & Scrollbar */
+.inv-modal-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 460px;
+    overflow-y: auto;
+    padding-right: 12px;
+    scrollbar-gutter: stable;
+}
+
+/* Custom golden scrollbar matching screenshot */
+.inv-modal-grid::-webkit-scrollbar {
+    width: 8px;
+}
+.inv-modal-grid::-webkit-scrollbar-track {
+    background: rgba(3, 8, 18, 0.8);
+    border-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+.inv-modal-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+}
+
+/* Section Header Dividers: Consumables, Weapons, Armor */
+.inv-section-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    margin-bottom: 2px;
+}
+
+.inv-section-title-text {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    color: #ffd700;
+    font-weight: 700;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inv-section-line {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #d4af37 0%, rgba(212, 175, 55, 0.2) 80%, transparent 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inv-section-line::before {
+    content: "❖";
+    font-size: 9px;
+    color: #d4af37;
+    margin-left: -2px;
+}
+
+/* Item Rows */
+.inv-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(8, 17, 34, 0.85);
+    border-radius: 8px;
+    padding: 12px 18px;
+    gap: 16px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Specific colored borders with subtle corner notches */
+.inv-row-red {
+    border: 1.5px solid rgba(220, 38, 38, 0.7);
+    box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.15);
+}
+.inv-row-red:hover {
+    border-color: #ef4444;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(220, 38, 38, 0.25);
+}
+
+.inv-row-purple {
+    border: 1.5px solid rgba(168, 85, 247, 0.7);
+    box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.15);
+}
+.inv-row-purple:hover {
+    border-color: #c084fc;
+    box-shadow: 0 0 12px rgba(192, 132, 252, 0.3), inset 0 0 20px rgba(168, 85, 247, 0.25);
+}
+
+.inv-row-blue {
+    border: 1.5px solid rgba(14, 165, 233, 0.7);
+    box-shadow: inset 0 0 15px rgba(14, 165, 233, 0.15);
+}
+.inv-row-blue:hover {
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3), inset 0 0 20px rgba(14, 165, 233, 0.25);
+}
+
+.inv-row-gold {
+    border: 1.8px solid #ffd700;
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.25), inset 0 0 18px rgba(212, 175, 55, 0.15);
+    background: rgba(14, 25, 48, 0.9);
+}
+
+.inv-row-standard {
+    border: 1.5px solid rgba(56, 189, 248, 0.3);
+}
+.inv-row-standard:hover {
+    border-color: #38bdf8;
+}
+
+/* Left part: Icon Box + Details */
+.inv-item-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.inv-icon-box {
+    width: 50px;
+    height: 50px;
+    background: #050a14;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.inv-icon-box.icon-box-red {
+    border: 1px solid rgba(220, 38, 38, 0.5);
+    box-shadow: inset 0 0 10px rgba(220, 38, 38, 0.3);
+}
+
+.inv-icon-box.icon-box-purple {
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+.inv-icon-box.icon-box-blue {
+    border: 1px solid rgba(14, 165, 233, 0.5);
+    box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.3);
+}
+
+.inv-icon-box.icon-box-gold {
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.inv-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inv-item-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.inv-item-title .inv-equipped-tag {
+    color: #ffd700;
+    font-weight: 800;
+    font-size: 13px;
+    margin-left: 6px;
+    letter-spacing: 1px;
+}
+
+.inv-item-desc {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.inv-item-desc .stat-highlight {
+    color: #ffd700;
+    font-weight: 700;
+}
+
+/* Action Pill Buttons (USE, EQUIPPED, EQUIP) */
+.inv-pill-btn {
+    background: linear-gradient(180deg, #102a52 0%, #081730 100%);
+    border: 1.5px solid #38bdf8;
+    border-radius: 8px;
+    padding: 8px 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
+    transition: all 0.2s ease;
+    min-width: 110px;
+}
+
+.inv-pill-btn:hover:not(:disabled) {
+    border-color: #ffd700;
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+    transform: translateY(-1px);
+    color: #ffd700;
+}
+
+.inv-pill-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+    border-color: #475569;
+    color: #94a3b8;
+    box-shadow: none;
+}
+
+/* When equipped: gold styled pill button */
+.inv-pill-equipped {
+    background: linear-gradient(180deg, #241c08 0%, #120e03 100%);
+    border: 1.5px solid #ffd700;
+    color: #ffd700;
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.35);
+    cursor: default;
+}
+.inv-pill-equipped:hover {
+    border-color: #ffd700;
+    transform: none;
+    color: #ffd700;
+}
+
+/* ==========================================================================
+   COMBAT ANIMATIONS & FLOATING DAMAGE NUMBERS (EXACT IMAGE 3 MATCH)
+   ========================================================================== */
+.floating-number {
+    position: fixed;
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 9999;
+    text-shadow: 
+        0 2px 4px #000,
+        0 0 12px rgba(0, 0, 0, 0.9);
+    animation: floatDamageUp 1s ease-out forwards;
+    letter-spacing: 1.5px;
+}
+
+.floating-damage {
+    color: #ef4444;
+    text-shadow: 
+        0 2px 6px #000000, 
+        0 0 16px rgba(239, 68, 68, 0.9),
+        0 0 28px rgba(220, 38, 38, 0.7);
+}
+
+.floating-crit {
+    color: #fbbf24;
+    font-size: 50px;
+    text-shadow: 
+        0 2px 8px #000000, 
+        0 0 20px rgba(251, 191, 36, 0.95),
+        0 0 35px rgba(245, 158, 11, 0.8);
+}
+
+.floating-heal {
+    color: #34d399;
+    text-shadow: 
+        0 2px 6px #000000, 
+        0 0 16px rgba(52, 211, 153, 0.9);
+}
+
+@keyframes floatDamageUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.7);
+    }
+    15% {
+        opacity: 1;
+        transform: translateY(0px) scale(1.15);
+    }
+    65% {
+        opacity: 1;
+        transform: translateY(-25px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-55px) scale(0.95);
+    }
+}
+
+/* Screen Shake without permanent displacement */
+.shake-light {
+    animation: screenShakeLight 0.4s ease-in-out;
+}
+
+.shake-heavy {
+    animation: screenShakeHeavy 0.45s ease-in-out;
+}
+
+@keyframes screenShakeLight {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-4px, 3px); }
+    40% { transform: translate(4px, -3px); }
+    60% { transform: translate(-3px, 2px); }
+    80% { transform: translate(3px, -1px); }
+}
+
+@keyframes screenShakeHeavy {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(-8px, 6px); }
+    30% { transform: translate(8px, -6px); }
+    45% { transform: translate(-6px, 4px); }
+    60% { transform: translate(6px, -4px); }
+    75% { transform: translate(-4px, 2px); }
+    90% { transform: translate(3px, -1px); }
+}
+
+/* Battler Lunges */
+.lunge-right {
+    animation: lungeRightAnim 0.38s ease-in-out;
+}
+
+.lunge-left {
+    animation: lungeLeftAnim 0.38s ease-in-out;
+}
+
+@keyframes lungeRightAnim {
+    0%, 100% { transform: translateX(0); }
+    45% { transform: translateX(45px); }
+}
+
+@keyframes lungeLeftAnim {
+    0%, 100% { transform: translateX(0); }
+    45% { transform: translateX(-45px); }
+}
+
+.flash-red {
+    animation: flashRedAnim 0.35s ease;
+}
+
+@keyframes flashRedAnim {
+    0%, 100% { filter: none; }
+    50% { filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.95)) brightness(1.6); }
+}
+
+/* ==========================================================================
+   7. START SCREEN: GOLD ORNAMENTAL BANNER (EXACT IMAGE 4 MATCH)
+   ========================================================================== */
+.start-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('assets/backgrounds/start.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.start-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Image 4 Ornate Gold Filigree Box */
+.start-ornament-box {
+    position: relative;
+    background: linear-gradient(180deg, rgba(10, 18, 30, 0.94) 0%, rgba(5, 10, 18, 0.96) 100%);
+    border: 2px solid #b8860b;
+    border-radius: 12px;
+    box-shadow: 
+        0 0 0 3px rgba(184, 134, 11, 0.3),
+        0 0 50px rgba(0, 0, 0, 0.95), 
+        0 0 30px rgba(212, 175, 55, 0.25),
+        inset 0 0 25px rgba(0, 0, 0, 0.85);
+    max-width: 520px;
+    width: 88%;
+    padding: 34px 28px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+}
+
+/* Top Crown Filigree Wings & Dragon Seal */
+.start-dragon-crest-seal {
+    position: absolute;
+    top: -24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.crest-wings-left, .crest-wings-right {
+    width: 32px;
+    height: 14px;
+    border-top: 2px solid #d4af37;
+    border-bottom: 2px solid #854d0e;
+    opacity: 0.85;
+}
+
+.crest-wings-left {
+    border-radius: 10px 0 0 10px;
+}
+
+.crest-wings-right {
+    border-radius: 0 10px 10px 0;
+}
+
+.crest-inner-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #253347 0%, #0d1522 100%);
+    border: 2px solid #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5), inset 0 0 8px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crest-dragon-icon {
+    font-size: 20px;
+    filter: drop-shadow(0 0 4px #ffd700);
+}
+
+.start-title {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    letter-spacing: 3.5px;
+    color: #e5c158;
+    font-weight: 800;
+    margin-top: 14px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 15px rgba(229, 193, 88, 0.4);
+}
+
+.start-lore {
+    color: #cbd5e1;
+    font-size: 13.5px;
+    line-height: 1.7;
+    max-width: 440px;
+}
+
+/* Image 4 Hexagonal Gold Beveled Adventure Button */
+.start-adventure-btn {
+    background: linear-gradient(180deg, #996515 0%, #b8860b 45%, #6b4408 100%);
+    border: 1.5px solid #fef08a;
+    border-radius: 4px;
+    clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%);
+    padding: 12px 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 13.5px;
+    letter-spacing: 2.5px;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    transition: all 0.25s ease;
+    margin-top: 4px;
+}
+
+.start-adventure-btn:hover {
+    background: linear-gradient(180deg, #b8860b 0%, #d4af37 50%, #854d0e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(253, 224, 71, 0.6);
+}
+
+/* Bottom Right Keys Badge */
+.start-screen-keys-pill {
+    position: absolute;
+    bottom: 24px;
+    right: 28px;
+    background: rgba(14, 23, 34, 0.88);
+    border: 1.5px solid #284455;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: #94a3b8;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   COMBAT REWARD POPUP (Gold / XP Earned after Defeating Monster)
+   ========================================================================== */
+
+.combat-reward-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    z-index: 3000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.combat-reward-popup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.reward-popup-inner {
+    background: linear-gradient(160deg, #0a1628 0%, #0f1e35 60%, #07111f 100%);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 36px 28px;
+    min-width: 290px;
+    max-width: 360px;
+    text-align: center;
+    box-shadow:
+        0 0 0 1px rgba(212, 175, 55, 0.15),
+        0 0 40px rgba(212, 175, 55, 0.25),
+        0 20px 60px rgba(0, 0, 0, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.reward-popup-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.reward-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.reward-popup-icon {
+    font-size: 26px;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+}
+
+.reward-popup-title {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--gold-bright);
+    text-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+}
+
+.reward-popup-monster-name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.reward-popup-divider {
+    font-size: 12px;
+    color: var(--gold-dim);
+    letter-spacing: 4px;
+    margin-bottom: 18px;
+    opacity: 0.8;
+}
+
+.reward-popup-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reward-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 16px;
+    gap: 10px;
+}
+
+.reward-row .reward-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.reward-row .reward-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    flex: 1;
+    text-align: left;
+}
+
+.reward-row.reward-gold .reward-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    letter-spacing: 1px;
+}
+
+.reward-row.reward-xp .reward-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: #a78bfa;
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.6);
+    letter-spacing: 1px;
+}
+
+@keyframes rewardPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+.combat-reward-popup.show .reward-popup-inner {
+    animation: rewardPulse 0.5s ease 0.2s 1;
+}
+
+/* ==========================================================================
+   POTION SELECTION MODAL
+   ========================================================================== */
+
+#modal-potion-select {
+    z-index: 2500;
+}
+
+.potion-select-card {
+    background: linear-gradient(160deg, #0a1628 0%, #0f1e35 60%, #07111f 100%);
+    border: 2px solid var(--gold-border);
+    border-radius: 12px;
+    padding: 24px 28px 28px;
+    min-width: 300px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow:
+        0 0 0 1px rgba(212, 175, 55, 0.12),
+        0 0 35px rgba(212, 175, 55, 0.2),
+        0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.potion-select-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.potion-select-icon {
+    font-size: 24px;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
+}
+
+.potion-select-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: var(--gold-bright);
+    flex: 1;
+}
+
+.potion-select-divider {
+    font-size: 11px;
+    color: var(--gold-dim);
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
+
+.potion-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.potion-select-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.potion-select-item:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold);
+    transform: translateX(4px);
+}
+
+.potion-select-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.potion-item-emoji {
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.potion-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.potion-item-name {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.potion-item-heal {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #4ade80;
+    margin-top: 2px;
+}
+
+.potion-item-qty {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.potion-item-qty.in-stock {
+    color: var(--cyan-text);
 }
