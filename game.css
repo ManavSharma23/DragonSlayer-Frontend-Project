@@ -4,6 +4,8 @@
    glassmorphism panels, and royal blue accents of the reference screenshots.
    ========================================================================== */
 
+
+
 :root {
     --bg-dark: #040711;
     --navy-deep: #080e1a;
@@ -38,6 +40,8 @@
     --border-radius: 8px;
     --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+
 
 * {
     box-sizing: border-box;
